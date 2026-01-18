@@ -109,7 +109,7 @@ Verify if the token was correctly saved in Nextcloud using:
 
 ### Maintenance Mode:
 
-If your Nextcloud is in maintenance mode, the adapter will not be able to fetch data and will log an error. This is normal behavior as the API is disabled during maintenance.
+If your Nextcloud is in maintenance mode, the adapter will not be able to fetch data and will log an info. This is normal behavior as the API is disabled during maintenance.
 
 # Changelog
 ### 2.0.0 (2026-01-16)
