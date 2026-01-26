@@ -25,6 +25,7 @@ We apologize for the inconvenience, but this change was necessary to comply with
 ---
 
 ## Description
+### First: If you are looking for a widget specifically for this adapter, then create it using [VIS2-widget-nextcloud-monitoring](https://github.com/H5N1v2/VIS2-widget-nextcloud-monitoring)
 This adapter allows for detailed monitoring of your Nextcloud instance via the official OCS API (`serverinfo`). It provides numerous system data, user statistics, shares, as well as performance values from PHP (OPcache/FPM) and the database directly in ioBroker.
 
 ## Features
@@ -32,6 +33,7 @@ This adapter allows for detailed monitoring of your Nextcloud instance via the o
 * **User Statistics:** Number of active users (5 min, 1 hr, 24 hr), total number of files, and storage usage.
 * **Shares:** Monitoring of link shares, Talk rooms, and federated shares.
 * **Server Health:** PHP version, memory limit, OPcache hit rate, and detailed FPM process statistics.
+* **Widget:** A special widget specifically for Nextcloud monitoring is available [HERE](https://github.com/H5N1v2/VIS2-widget-nextcloud-monitoring).
 
 ---
 
