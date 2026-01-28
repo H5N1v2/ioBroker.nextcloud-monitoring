@@ -10,7 +10,7 @@
                     "type": "header",
                     "text": "Nextcloud Multi-Server Configuration",
                     "size": 2,
-                    "sm": 12
+                    "sm": 12, "xs": 12, "md": 12, "lg": 12, "xl": 12
                 },
                 "info_text": {
                     "type": "staticText",
@@ -18,13 +18,13 @@
                     "style": { 
                       "fontSize": "15px",
                       "fontWeight": "bold"
-                 },                
-                    "sm": 12
+                    },                
+                    "sm": 12, "xs": 12, "md": 12, "lg": 12, "xl": 12
                 },
                 "servers": {
                     "type": "table",
                     "label": "Nextcloud Instances",
-                    "sm": 12,
+                    "sm": 12, "xs": 12, "md": 12, "lg": 12, "xl": 12,
                     "items": [
                         {
                             "type": "text",
@@ -58,7 +58,7 @@
                     "type": "header",
                     "text": "Filter & Performance",
                     "size": 2,
-                    "sm": 12
+                    "sm": 12, "xs": 12, "md": 12, "lg": 12, "xl": 12
                 },
                 "interval": {
                     "type": "number",
@@ -68,24 +68,21 @@
                     "min": 5,
                     "max": 1440,
                     "default": 10,
-                    "sm": 12,
-                    "md": 3
+                    "sm": 12, "xs": 12, "md": 3, "lg": 3, "xl": 3
                 },
                 "skipApps": {
                     "type": "checkbox",
                     "label": "Skip Apps Data",
                     "help": "Check this to reduce data volume (skips detailed app list)",
                     "default": false,
-                    "sm": 12,
-                    "md": 3
+                    "sm": 12, "xs": 12, "md": 3, "lg": 3, "xl": 3
                 },
                 "skipUpdate": {
                     "type": "checkbox",
                     "label": "Skip Update Check",
                     "help": "Check this to disable version checking",
                     "default": false,
-                    "sm": 12,
-                    "md": 3
+                    "sm": 12, "xs": 12, "md": 3, "lg": 3, "xl": 3
                 }
             }
         }
