@@ -35,9 +35,10 @@ class NextcloudMonitoring extends utils.Adapter {
 	 */
 	private async onReady(): Promise<void> {
 		const config = this.config as AdapterConfig;
+		this.log.debug('onReady: starting initialization');
 
 		if (!config.servers || !Array.isArray(config.servers) || config.servers.length === 0) {
-			this.log.error('Konfiguration unvollständig: Keine Server in der Tabelle gefunden!');
+			this.log.error('Configuration incomplete: No servers found in the table!');
 			return;
 		}
 
@@ -51,6 +52,7 @@ class NextcloudMonitoring extends utils.Adapter {
 		this.updateInterval = this.setInterval(async () => {
 			await this.updateAllServers();
 		}, intervalMs);
+		this.log.debug(`onReady: scheduled updates every ${minutes} minutes`);
 	}
 
 	/**
@@ -58,18 +60,19 @@ class NextcloudMonitoring extends utils.Adapter {
 	 */
 	private async updateAllServers(): Promise<void> {
 		const config = this.config as AdapterConfig;
+		this.log.debug('updateAllServers: starting update for all servers');
 
 		for (const server of config.servers) {
 			if (!server.domain || !server.token) {
-				this.log.warn(`Server "${server.name || 'Unbekannt'}" übersprungen: Domain oder Token fehlt.`);
+				this.log.warn(`Server "${server.name || 'Unknown'}" skipped: Domain or token is missing.`);
 				continue;
 			}
+			this.log.debug(`updateAllServers: processing server ${server.name || server.domain}`);
 
 			// Erzeuge eine saubere ID für den ioBroker Objektbaum
-			// Ersetzt Punkte und Leerzeichen durch Unterstriche
 			const cleanId = (server.name || server.domain).replace(this.FORBIDDEN_CHARS, '_').replace(/\s|\./g, '_');
 
-			this.log.info(`Abfrage läuft für: ${server.name} (${server.domain})`);
+			this.log.info(`Query running for: ${server.name} (${server.domain})`);
 
 			const apiClient = new NextcloudApiClient(
 				server.domain,
@@ -79,26 +82,30 @@ class NextcloudMonitoring extends utils.Adapter {
 			);
 
 			await this.updateNextcloudData(cleanId, apiClient);
+			this.log.debug(`updateAllServers: finished processing ${cleanId}`);
 		}
+		this.log.debug('updateAllServers: completed all servers');
 	}
 
 	/**
 	 * Hauptfunktion zum Abrufen und Verarbeiten aller Datenpunkte eines spezifischen Servers.
 	 *
-	 * @param serverId serverId The unique ID of the server used as the root folder in the object tree.
-	 * @param apiClient apiClient The instance of the NextcloudApiClient used to communicate with this specific server.
+	 * @param serverId ID of the server used as the root folder in the object tree
+	 * @param apiClient Instance of the NextcloudApiClient for this specific server
 	 */
 	private async updateNextcloudData(serverId: string, apiClient: NextcloudApiClient): Promise<void> {
 		try {
+			this.log.debug(`updateNextcloudData: fetching data for ${serverId}`);
 			const response = await apiClient.fetchData();
 
 			if (!response?.ocs?.data) {
-				this.log.warn(`Unerwartete API-Antwort von Nextcloud (${serverId})`);
+				this.log.warn(`Unexpected API response from Nextcloud (${serverId})`);
 				return;
 			}
 
 			const data = response.ocs.data;
 			const nc = data.nextcloud;
+			this.log.debug(`updateNextcloudData: received data keys for ${serverId}: ${Object.keys(data).join(', ')}`);
 
 			// --- 1. SYSTEM & HARDWARE ---
 			if (nc?.system) {
@@ -430,27 +437,20 @@ class NextcloudMonitoring extends utils.Adapter {
 				);
 			}
 
-			this.log.debug(`Monitoring (${serverId}): Alle Daten erfolgreich aktualisiert.`);
+			this.log.debug(`Monitoring (${serverId}): All data updated successfully.`);
 		} catch (error: any) {
 			if (error.response && error.response.status === 503) {
-				this.log.info(`Nextcloud (${serverId}) befindet sich im Wartungsmodus (Maintenance).`);
+				this.log.info(`Nextcloud (${serverId}) is in maintenance mode.`);
 			} else {
-				this.log.error(`Fehler bei Server "${serverId}": ${error.message}`);
+				this.log.error(`Error on server "${serverId}": ${error.message}`);
 			}
+			this.log.debug(`updateNextcloudData error for ${serverId}: ${error.stack || error}`);
 		}
 	}
 
-	/**
-	 * Erstellt ein Objekt, falls es nicht existiert, und setzt den Wert.
-	 * Nutzt die Übersetzungstabelle für die Namen.
-	 *
-	 * @param id The ID of the state to be created (e.g., 'system.version').
-	 * @param nameKey The key for the translation in words.ts or the display name.
-	 * @param value The value to be stored (can be string, number, boolean, etc.).
-	 * @param type The ioBroker data type (e.g., 'string', 'number', 'boolean', 'array', 'object', 'mixed').
-	 */
 	private async setAndCreateState(id: string, nameKey: string, value: any, type: ioBroker.CommonType): Promise<void> {
 		const translatedName = words[nameKey] || nameKey;
+		this.log.debug(`setAndCreateState: ${id} value=${String(value)}`);
 
 		await this.setObjectNotExistsAsync(id, {
 			type: 'state',
@@ -466,13 +466,9 @@ class NextcloudMonitoring extends utils.Adapter {
 		await this.setState(id, { val: value, ack: true });
 	}
 
-	/**
-	 * Wird beim Stoppen des Adapters aufgerufen.
-	 *
-	 * @param callback A function that must be called once the unloading process is finished.
-	 */
 	private onUnload(callback: () => void): void {
 		try {
+			this.log.debug('onUnload: adapter is stopping, clearing interval');
 			if (this.updateInterval) {
 				this.clearInterval(this.updateInterval);
 			}

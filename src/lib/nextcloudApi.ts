@@ -35,10 +35,16 @@ export class NextcloudApiClient {
 
 	/**
 	 * Holt die Monitoring-Daten von der API.
+	 *
+	 * @param logger Optionaler ioBroker Logger für Debug-Ausgaben
 	 */
-	public async fetchData(): Promise<any> {
+	public async fetchData(logger?: ioBroker.Logger): Promise<any> {
 		const cleanDomain = this.domain.replace(/^https?:\/\//, '').replace(/\/$/, '');
 		const url = `https://${cleanDomain}/ocs/v2.php/apps/serverinfo/api/v1/info?format=json&skipApps=${this.skipApps}&skipUpdate=${this.skipUpdate}`;
+
+		if (logger) {
+			logger.debug(`Nextcloud API Request URL: ${url}`);
+		}
 
 		const response = await axios.get(url, {
 			headers: {
@@ -48,6 +54,10 @@ export class NextcloudApiClient {
 			},
 			timeout: 10000,
 		});
+
+		if (logger) {
+			logger.debug(`Nextcloud API Response Status: ${response.status} (${response.statusText})`);
+		}
 
 		return response.data;
 	}
