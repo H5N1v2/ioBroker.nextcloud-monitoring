@@ -113,7 +113,7 @@ Verify if the token was correctly saved in Nextcloud using:
 
 If your Nextcloud is in maintenance mode, the adapter will not be able to fetch data and will log an info. This is normal behavior as the API is disabled during maintenance.
 
-# Changelog
+## Changelog
 ### 2.0.0 (2026-01-16)
 * (H5N1v2) Added Multi-Server Support: You can now manage and monitor multiple Nextcloud instances within a single adapter instance using a dynamic table configuration.
 * (H5N1v2) Refactored State Structure: Reorganized the object tree to provide a cleaner and more logical hierarchy for all monitored data.
