@@ -73,8 +73,21 @@ To enable access, you must generate a token (a random string) and register it in
 # Set Token in Nextcloud
 **Example for Linux (Standard path) in Terminal:**
 ```bash
-sudo -u www-data php /var/www/nextcloud/occ config:app:set serverinfo token --value YOUR_GENERATED_TOKEN
+sudo -u www-data php /path_to/your/nextcloud_folder/occ config:app:set serverinfo token --value YOUR_GENERATED_TOKEN
 ```
+**Example for Linux (Directly in your Nextcloud folder) in Terminal:**
+```bash
+sudo -u www-data php occ config:app:set serverinfo token --value YOUR_GENERATED_TOKEN
+```
+**If you use your Nextcloud in a webspace or other Provider, mostly you don't need sudo, simply do:**
+ ```bash
+ #Directly in your Nextcloudfolder
+php occ config:app:set serverinfo token --value YOUR_GENERATED_TOKEN
+
+# Or with path
+php /path_to/your/nextcloud_folder/occ config:app:set serverinfo token --value YOUR_GENERATED_TOKEN
+```
+
 Command for Windows (PowerShell/CMD): Navigate to your Nextcloud directory and execute:
 
 `php occ config:app:set serverinfo token --value YOUR_GENERATED_TOKEN`
@@ -107,7 +120,17 @@ Ensure that the "Server Info" app (standard app) is enabled in your Nextcloud un
 
 Verify if the token was correctly saved in Nextcloud using:
 
-`occ cofig:app:get serverinfo token`
+* In Linux: 
+
+`sudo -u www-data php /path_to/your/nextcloud_folder/occ config:app:get serverinfo token`
+
+* Or if you are directly in folder, use:
+
+`sudo -u www-data php occ config:app:get serverinfo token`
+
+* If you use your Nextcloud in a webspace or other Provider, mostly you don't need sudo:
+
+`php occ config:app:get serverinfo token` or `php /path_to/your/nextcloud_folder/occ config:app:get serverinfo token`
 
 ### Maintenance Mode:
 
