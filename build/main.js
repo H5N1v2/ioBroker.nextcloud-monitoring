@@ -26,6 +26,7 @@ var import_nextcloudApi = require("./lib/nextcloudApi");
 var import_words = require("./lib/words");
 class NextcloudMonitoring extends utils.Adapter {
   updateInterval;
+  createdStates = /* @__PURE__ */ new Set();
   constructor(options = {}) {
     super({ ...options, name: "nextcloud-monitoring" });
     this.on("ready", this.onReady.bind(this));
@@ -412,18 +413,21 @@ class NextcloudMonitoring extends utils.Adapter {
   async setAndCreateState(id, nameKey, value, type) {
     const translatedName = import_words.words[nameKey] || nameKey;
     this.log.debug(`setAndCreateState: ${id} value=${String(value)}`);
-    await this.setObjectNotExistsAsync(id, {
-      type: "state",
-      common: {
-        name: translatedName,
-        type,
-        role: "value",
-        read: true,
-        write: false
-      },
-      native: {}
-    });
-    await this.setState(id, { val: value, ack: true });
+    if (!this.createdStates.has(id)) {
+      await this.setObjectNotExistsAsync(id, {
+        type: "state",
+        common: {
+          name: translatedName,
+          type,
+          role: "value",
+          read: true,
+          write: false
+        },
+        native: {}
+      });
+      this.createdStates.add(id);
+    }
+    await this.setStateAsync(id, { val: value, ack: true });
   }
   onUnload(callback) {
     try {

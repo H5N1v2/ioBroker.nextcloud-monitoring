@@ -23,6 +23,7 @@ interface AdapterConfig extends ioBroker.AdapterConfig {
 
 class NextcloudMonitoring extends utils.Adapter {
 	private updateInterval: ioBroker.Interval | undefined;
+	private createdStates: Set<string> = new Set();
 
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({ ...options, name: 'nextcloud-monitoring' });
@@ -452,18 +453,22 @@ class NextcloudMonitoring extends utils.Adapter {
 		const translatedName = words[nameKey] || nameKey;
 		this.log.debug(`setAndCreateState: ${id} value=${String(value)}`);
 
-		await this.setObjectNotExistsAsync(id, {
-			type: 'state',
-			common: {
-				name: translatedName,
-				type,
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-		await this.setState(id, { val: value, ack: true });
+		// Objekt nur erstellen, wenn es noch nicht gecacht ist
+		if (!this.createdStates.has(id)) {
+			await this.setObjectNotExistsAsync(id, {
+				type: 'state',
+				common: {
+					name: translatedName,
+					type,
+					role: 'value',
+					read: true,
+					write: false,
+				},
+				native: {},
+			});
+			this.createdStates.add(id);
+		}
+		await this.setStateAsync(id, { val: value, ack: true });
 	}
 
 	private onUnload(callback: () => void): void {
