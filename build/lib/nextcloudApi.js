@@ -75,7 +75,8 @@ class NextcloudApiClient {
       headers: {
         "OCS-APIRequest": "true",
         "NC-Token": this.token,
-        Accept: "application/json"
+        Accept: "application/json",
+        Connection: "close"
       },
       timeout: 1e4
     });
