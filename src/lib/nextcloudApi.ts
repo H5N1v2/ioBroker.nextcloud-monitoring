@@ -51,6 +51,7 @@ export class NextcloudApiClient {
 				'OCS-APIRequest': 'true',
 				'NC-Token': this.token,
 				Accept: 'application/json',
+				Connection: 'close',
 			},
 			timeout: 10000,
 		});
