@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "nextcloud-monitoring",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "news": {
+      "2.0.1": {
+        "en": "fix: Optimize state creation by caching existing states\nfix: Set Connection header to 'close' in API request",
+        "de": "fix: Optimieren Sie die Zustandserstellung durch Caching bestehender Staaten\nfix: Verbindungskopf auf 'close' in API-Anfrage einstellen",
+        "ru": "исправление: оптимизация создания государства путем кэширования существующих государств\nустановите заголовок Connection, чтобы «закрыть» в запросе API",
+        "pt": "correção: Otimizar a criação de estado através do cache de estados existentes\ncorreção: Definir o cabeçalho de conexão para 'fechar' na solicitação da API",
+        "nl": "fix: Optimaliseer het aanmaken van staat door bestaande staten te cachen\nfix: Verbindingskop instellen op 'sluiten' in API-verzoek",
+        "fr": "correction : Optimiser la création d'états en cachant les états existants\ncorrection : Définir l'en-tête de connexion pour 'fermer' dans la requête API",
+        "it": "fix: Ottimizzare la creazione di stato mediante il caching stati esistenti\nfix: Impostare l'intestazione di connessione per 'chiudere' nella richiesta API",
+        "es": "fijación: Optimize state creation by caching existing states\nfijación: Configurar cabecera de conexión a 'cerrar' en la solicitud de API",
+        "pl": "fix: Optymalizacja tworzenia stanu poprzez buforowanie istniejących stanów\nfix: Ustaw nagłówek połączenia na 'close' w żądaniu API",
+        "uk": "виправити: Оптимізувати державне створення шляхом кешування існуючих станів\nвиправити: встановити заголовок підключення до 'закривати' в запиті API",
+        "zh-cn": "固定: 通过缓存现有状态优化状态创建\n固定: 在 API 请求中设置“ 关闭” 的连接头"
+      },
       "2.0.0": {
         "en": "Multi-server support added, state structure refactored for better clarity, and localization expanded for all languages.",
         "de": "Multi-Server-Unterstützung hinzugefügt, Datenpunkt-Struktur für bessere Übersicht überarbeitet und Lokalisierung für alle Sprachen erweitert.",
