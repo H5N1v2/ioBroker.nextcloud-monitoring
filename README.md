@@ -137,6 +137,12 @@ Verify if the token was correctly saved in Nextcloud using:
 If your Nextcloud is in maintenance mode, the adapter will not be able to fetch data and will log an info. This is normal behavior as the API is disabled during maintenance.
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (H5N1v2) fix: language used for stateIds and names
+* (H5N1v2) fix: creation of intermediate objects missing
+* (H5N1v2) chore: update dependencies to latest versions
+* (H5N1v2) added axios in dependencies
+
 ### 2.0.1 (2026-02-05)
 * (H5N1v2) fix: Optimize state creation by caching existing states
 * (H5N1v2) fix: Set Connection header to 'close' in API request
