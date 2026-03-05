@@ -42,6 +42,24 @@ class NextcloudMonitoring extends utils.Adapter {
       this.log.error("Configuration incomplete: No servers found in the table!");
       return;
     }
+    await this.extendForeignObjectAsync(this.namespace, {
+      type: "meta",
+      common: {
+        name: {
+          en: "Nextcloud Monitoring Service",
+          de: "Nextcloud-\xDCberwachungsdienst",
+          ru: "\u0421\u043B\u0443\u0436\u0431\u0430 \u043C\u043E\u043D\u0438\u0442\u043E\u0440\u0438\u043D\u0433\u0430 Nextcloud",
+          pt: "Servi\xE7o de monitoramento do Nextcloud",
+          nl: "Nextcloud-monitoringservice",
+          fr: "Service de surveillance Nextcloud",
+          it: "Servizio di monitoraggio Nextcloud",
+          es: "Servicio de monitoreo de Nextcloud",
+          pl: "Us\u0142uga monitorowania Nextcloud",
+          uk: "\u0421\u0435\u0440\u0432\u0456\u0441 \u043C\u043E\u043D\u0456\u0442\u043E\u0440\u0438\u043D\u0433\u0443 Nextcloud",
+          "zh-cn": "Nextcloud \u76D1\u63A7\u670D\u52A1"
+        }
+      }
+    });
     await this.updateAllServers();
     const minutes = config.interval || 10;
     const intervalMs = minutes * 60 * 1e3;
@@ -70,6 +88,13 @@ class NextcloudMonitoring extends utils.Adapter {
         config.skipApps,
         config.skipUpdate
       );
+      await this.setObjectNotExistsAsync(cleanId, {
+        type: "device",
+        common: {
+          name: server.name || server.domain
+        },
+        native: {}
+      });
       await this.updateNextcloudData(cleanId, apiClient);
       this.log.debug(`updateAllServers: finished processing ${cleanId}`);
     }
@@ -82,10 +107,209 @@ class NextcloudMonitoring extends utils.Adapter {
    * @param apiClient Instance of the NextcloudApiClient for this specific server
    */
   async updateNextcloudData(serverId, apiClient) {
-    var _a;
+    var _a, _b;
     try {
       this.log.debug(`updateNextcloudData: fetching data for ${serverId}`);
       const response = await apiClient.fetchData();
+      const config = this.config;
+      let channels = [
+        {
+          id: "activeUsers",
+          name: {
+            en: "Active users",
+            de: "Aktive Benutzer",
+            pl: "Aktywni u\u017Cytkownicy",
+            ru: "\u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438",
+            it: "Utenti attivi",
+            es: "Usuarios activos",
+            "zh-cn": "\u6D3B\u8DC3\u7528\u6237",
+            fr: "Utilisateurs actifs",
+            pt: "Usu\xE1rios ativos",
+            nl: "Actieve gebruikers",
+            uk: "\u0410\u043A\u0442\u0438\u0432\u043D\u0456 \u043A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447\u0438"
+          }
+        },
+        {
+          id: "apps",
+          name: {
+            en: "Applications",
+            de: "Anwendungen",
+            pl: "Aplikacje",
+            ru: "\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u044F",
+            it: "Applicazioni",
+            es: "Aplicaciones",
+            "zh-cn": "\u5E94\u7528\u7A0B\u5E8F",
+            fr: "Applications",
+            pt: "Aplicativos",
+            nl: "Applicaties",
+            uk: "\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u0438"
+          }
+        },
+        {
+          id: "server",
+          name: {
+            en: "Server",
+            de: "Server",
+            pl: "Serwer",
+            ru: "\u0421\u0435\u0440\u0432\u0435\u0440",
+            it: "Server",
+            es: "Servidor",
+            "zh-cn": "\u670D\u52A1\u5668",
+            fr: "Serveur",
+            pt: "Servidor",
+            nl: "Server",
+            uk: "\u0421\u0435\u0440\u0432\u0435\u0440"
+          }
+        },
+        {
+          id: "server.database",
+          name: {
+            en: "Database",
+            de: "Datenbank",
+            pl: "Baza danych",
+            ru: "\u0411\u0430\u0437\u0430 \u0434\u0430\u043D\u043D\u044B\u0445",
+            it: "Database",
+            es: "Base de datos",
+            "zh-cn": "\u6570\u636E\u5E93",
+            fr: "Base de donn\xE9es",
+            pt: "Banco de dados",
+            nl: "Database",
+            uk: "\u0411\u0430\u0437\u0430 \u0434\u0430\u043D\u0438\u0445"
+          }
+        },
+        {
+          id: "server.fpm",
+          name: {
+            en: "PHP-FPM",
+            de: "PHP-FPM",
+            pl: "PHP-FPM",
+            ru: "PHP-FPM",
+            it: "PHP-FPM",
+            es: "PHP-FPM",
+            "zh-cn": "PHP-FPM",
+            fr: "PHP-FPM",
+            pt: "PHP-FPM",
+            nl: "PHP-FPM",
+            uk: "PHP-FPM"
+          }
+        },
+        {
+          id: "server.php",
+          name: {
+            en: "PHP Settings",
+            de: "PHP-Einstellungen",
+            pl: "Ustawienia PHP",
+            ru: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 PHP",
+            it: "Impostazioni PHP",
+            es: "Ajustes de PHP",
+            "zh-cn": "PHP \u8BBE\u7F6E",
+            fr: "Param\xE8tres PHP",
+            pt: "Configura\xE7\xF5es do PHP",
+            nl: "PHP-instellingen",
+            uk: "\u041D\u0430luftungen PHP"
+          }
+        },
+        {
+          id: "server.php.apcu",
+          name: {
+            en: "PHP APCu Cache",
+            de: "PHP APCu Cache",
+            pl: "Pami\u0119\u0107 podr\u0119czna PHP APCu",
+            ru: "\u041A\u044D\u0448 PHP APCu",
+            it: "Cache PHP APCu",
+            es: "Cach\xE9 PHP APCu",
+            "zh-cn": "PHP APCu \u7F13\u5B58",
+            fr: "Cache PHP APCu",
+            pt: "Cache APCu do PHP",
+            nl: "PHP APCu-cache",
+            uk: "\u041A\u0435\u0448 PHP APCu"
+          }
+        },
+        {
+          id: "server.php.opcache",
+          name: {
+            en: "PHP OPcache",
+            de: "PHP OPcache",
+            pl: "PHP OPcache",
+            ru: "PHP OPcache",
+            it: "PHP OPcache",
+            es: "PHP OPcache",
+            "zh-cn": "PHP OPcache",
+            fr: "PHP OPcache",
+            pt: "PHP OPcache",
+            nl: "PHP OPcache",
+            uk: "PHP OPcache"
+          }
+        },
+        {
+          id: "shares",
+          name: {
+            en: "Shares",
+            de: "Freigaben",
+            pl: "Udzia\u0142y",
+            ru: "\u041E\u0431\u0449\u0438\u0435 \u0440\u0435\u0441\u0443\u0440\u0441\u044B",
+            it: "Condivisioni",
+            es: "Recursos compartidos",
+            "zh-cn": "\u5171\u4EAB",
+            fr: "Partages",
+            pt: "Compartilhamentos",
+            nl: "Gedeelde mappen",
+            uk: "\u0421\u043F\u0456\u043B\u044C\u043D\u0456 \u0440\u0435\u0441\u0443\u0440\u0441\u0438"
+          }
+        },
+        {
+          id: "storage",
+          name: {
+            en: "Storage",
+            de: "Speicher",
+            pl: "Magazyn danych",
+            ru: "\u0425\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0435",
+            it: "Archiviazione",
+            es: "Almacenamiento",
+            "zh-cn": "\u5B58\u50A8",
+            fr: "Stockage",
+            pt: "Armazenamento",
+            nl: "Opslag",
+            uk: "\u0421\u0445\u043E\u0432\u0438\u0449\u0435"
+          }
+        },
+        {
+          id: "system",
+          name: {
+            en: "System",
+            de: "System",
+            pl: "System",
+            ru: "\u0421\u0438\u0441\u0442\u0435\u043C\u0430",
+            it: "Sistema",
+            es: "Sistema",
+            "zh-cn": "\u7CFB\u7EDF",
+            fr: "Syst\xE8me",
+            pt: "Sistema",
+            nl: "Systeem",
+            uk: "\u0421\u0438\u0441\u0442\u0435\u043C\u0430"
+          }
+        }
+      ];
+      if (config.skipApps) {
+        this.log.debug(`Filtering out App details for ${serverId}`);
+      }
+      if (config.skipUpdate) {
+        this.log.debug(`Filtering out Update details for ${serverId}`);
+      }
+      if (config.skipApps && config.skipUpdate) {
+        this.log.debug(`Skipping entire Apps channel`);
+        channels = channels.filter((chan) => !chan.id.startsWith("apps"));
+      }
+      for (const chan of channels) {
+        await this.setObjectNotExistsAsync(`${serverId}.${chan.id}`, {
+          type: "channel",
+          common: {
+            name: chan.name,
+            role: "info"
+          },
+          native: {}
+        });
+      }
       if (!((_a = response == null ? void 0 : response.ocs) == null ? void 0 : _a.data)) {
         this.log.warn(`Unexpected API response from Nextcloud (${serverId})`);
         return;
@@ -185,7 +409,7 @@ class NextcloudMonitoring extends utils.Adapter {
           await this.setAndCreateState(
             `${serverId}.apps.available_new_version`,
             "Available New Version",
-            sys.update.available_version,
+            (_b = sys.update.available_version) != null ? _b : "0",
             "string"
           );
         }
@@ -427,7 +651,7 @@ class NextcloudMonitoring extends utils.Adapter {
       });
       this.createdStates.add(id);
     }
-    await this.setStateAsync(id, { val: value, ack: true });
+    await this.setState(id, { val: value, ack: true });
   }
   onUnload(callback) {
     try {

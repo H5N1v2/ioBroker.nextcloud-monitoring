@@ -42,6 +42,24 @@ class NextcloudMonitoring extends utils.Adapter {
 			this.log.error('Configuration incomplete: No servers found in the table!');
 			return;
 		}
+		await this.extendForeignObjectAsync(this.namespace, {
+			type: 'meta',
+			common: {
+				name: {
+					en: 'Nextcloud Monitoring Service',
+					de: 'Nextcloud-Überwachungsdienst',
+					ru: 'Служба мониторинга Nextcloud',
+					pt: 'Serviço de monitoramento do Nextcloud',
+					nl: 'Nextcloud-monitoringservice',
+					fr: 'Service de surveillance Nextcloud',
+					it: 'Servizio di monitoraggio Nextcloud',
+					es: 'Servicio de monitoreo de Nextcloud',
+					pl: 'Usługa monitorowania Nextcloud',
+					uk: 'Сервіс моніторингу Nextcloud',
+					'zh-cn': 'Nextcloud 监控服务',
+				},
+			},
+		});
 
 		// Erstmaliger Aufruf beim Start
 		await this.updateAllServers();
@@ -81,6 +99,13 @@ class NextcloudMonitoring extends utils.Adapter {
 				config.skipApps,
 				config.skipUpdate,
 			);
+			await this.setObjectNotExistsAsync(cleanId, {
+				type: 'device',
+				common: {
+					name: server.name || server.domain,
+				},
+				native: {},
+			});
 
 			await this.updateNextcloudData(cleanId, apiClient);
 			this.log.debug(`updateAllServers: finished processing ${cleanId}`);
@@ -98,6 +123,211 @@ class NextcloudMonitoring extends utils.Adapter {
 		try {
 			this.log.debug(`updateNextcloudData: fetching data for ${serverId}`);
 			const response = await apiClient.fetchData();
+			const config = this.config as AdapterConfig;
+
+			let channels = [
+				{
+					id: 'activeUsers',
+					name: {
+						en: 'Active users',
+						de: 'Aktive Benutzer',
+						pl: 'Aktywni użytkownicy',
+						ru: 'Активные пользователи',
+						it: 'Utenti attivi',
+						es: 'Usuarios activos',
+						'zh-cn': '活跃用户',
+						fr: 'Utilisateurs actifs',
+						pt: 'Usuários ativos',
+						nl: 'Actieve gebruikers',
+						uk: 'Активні користувачи',
+					},
+				},
+				{
+					id: 'apps',
+					name: {
+						en: 'Applications',
+						de: 'Anwendungen',
+						pl: 'Aplikacje',
+						ru: 'Приложения',
+						it: 'Applicazioni',
+						es: 'Aplicaciones',
+						'zh-cn': '应用程序',
+						fr: 'Applications',
+						pt: 'Aplicativos',
+						nl: 'Applicaties',
+						uk: 'Програми',
+					},
+				},
+				{
+					id: 'server',
+					name: {
+						en: 'Server',
+						de: 'Server',
+						pl: 'Serwer',
+						ru: 'Сервер',
+						it: 'Server',
+						es: 'Servidor',
+						'zh-cn': '服务器',
+						fr: 'Serveur',
+						pt: 'Servidor',
+						nl: 'Server',
+						uk: 'Сервер',
+					},
+				},
+				{
+					id: 'server.database',
+					name: {
+						en: 'Database',
+						de: 'Datenbank',
+						pl: 'Baza danych',
+						ru: 'База данных',
+						it: 'Database',
+						es: 'Base de datos',
+						'zh-cn': '数据库',
+						fr: 'Base de données',
+						pt: 'Banco de dados',
+						nl: 'Database',
+						uk: 'База даних',
+					},
+				},
+				{
+					id: 'server.fpm',
+					name: {
+						en: 'PHP-FPM',
+						de: 'PHP-FPM',
+						pl: 'PHP-FPM',
+						ru: 'PHP-FPM',
+						it: 'PHP-FPM',
+						es: 'PHP-FPM',
+						'zh-cn': 'PHP-FPM',
+						fr: 'PHP-FPM',
+						pt: 'PHP-FPM',
+						nl: 'PHP-FPM',
+						uk: 'PHP-FPM',
+					},
+				},
+				{
+					id: 'server.php',
+					name: {
+						en: 'PHP Settings',
+						de: 'PHP-Einstellungen',
+						pl: 'Ustawienia PHP',
+						ru: 'Настройки PHP',
+						it: 'Impostazioni PHP',
+						es: 'Ajustes de PHP',
+						'zh-cn': 'PHP 设置',
+						fr: 'Paramètres PHP',
+						pt: 'Configurações do PHP',
+						nl: 'PHP-instellingen',
+						uk: 'Наluftungen PHP',
+					},
+				},
+				{
+					id: 'server.php.apcu',
+					name: {
+						en: 'PHP APCu Cache',
+						de: 'PHP APCu Cache',
+						pl: 'Pamięć podręczna PHP APCu',
+						ru: 'Кэш PHP APCu',
+						it: 'Cache PHP APCu',
+						es: 'Caché PHP APCu',
+						'zh-cn': 'PHP APCu 缓存',
+						fr: 'Cache PHP APCu',
+						pt: 'Cache APCu do PHP',
+						nl: 'PHP APCu-cache',
+						uk: 'Кеш PHP APCu',
+					},
+				},
+				{
+					id: 'server.php.opcache',
+					name: {
+						en: 'PHP OPcache',
+						de: 'PHP OPcache',
+						pl: 'PHP OPcache',
+						ru: 'PHP OPcache',
+						it: 'PHP OPcache',
+						es: 'PHP OPcache',
+						'zh-cn': 'PHP OPcache',
+						fr: 'PHP OPcache',
+						pt: 'PHP OPcache',
+						nl: 'PHP OPcache',
+						uk: 'PHP OPcache',
+					},
+				},
+				{
+					id: 'shares',
+					name: {
+						en: 'Shares',
+						de: 'Freigaben',
+						pl: 'Udziały',
+						ru: 'Общие ресурсы',
+						it: 'Condivisioni',
+						es: 'Recursos compartidos',
+						'zh-cn': '共享',
+						fr: 'Partages',
+						pt: 'Compartilhamentos',
+						nl: 'Gedeelde mappen',
+						uk: 'Спільні ресурси',
+					},
+				},
+				{
+					id: 'storage',
+					name: {
+						en: 'Storage',
+						de: 'Speicher',
+						pl: 'Magazyn danych',
+						ru: 'Хранилище',
+						it: 'Archiviazione',
+						es: 'Almacenamiento',
+						'zh-cn': '存储',
+						fr: 'Stockage',
+						pt: 'Armazenamento',
+						nl: 'Opslag',
+						uk: 'Сховище',
+					},
+				},
+				{
+					id: 'system',
+					name: {
+						en: 'System',
+						de: 'System',
+						pl: 'System',
+						ru: 'Система',
+						it: 'Sistema',
+						es: 'Sistema',
+						'zh-cn': '系统',
+						fr: 'Système',
+						pt: 'Sistema',
+						nl: 'Systeem',
+						uk: 'Система',
+					},
+				},
+			];
+
+			if (config.skipApps) {
+				this.log.debug(`Filtering out App details for ${serverId}`);
+			}
+
+			if (config.skipUpdate) {
+				this.log.debug(`Filtering out Update details for ${serverId}`);
+			}
+
+			if (config.skipApps && config.skipUpdate) {
+				this.log.debug(`Skipping entire Apps channel`);
+				channels = channels.filter(chan => !chan.id.startsWith('apps'));
+			}
+
+			// 3. WICHTIG: Die Variable muss hier benutzt werden!
+			for (const chan of channels) {
+				await this.setObjectNotExistsAsync(`${serverId}.${chan.id}`, {
+					type: 'channel',
+					common: {
+						name: chan.name as any,
+						role: 'info',
+					},
+					native: {},
+				});
+			}
 
 			if (!response?.ocs?.data) {
 				this.log.warn(`Unexpected API response from Nextcloud (${serverId})`);
@@ -207,7 +437,7 @@ class NextcloudMonitoring extends utils.Adapter {
 					await this.setAndCreateState(
 						`${serverId}.apps.available_new_version`,
 						'Available New Version',
-						sys.update.available_version,
+						sys.update.available_version ?? '0',
 						'string',
 					);
 				}
@@ -468,7 +698,7 @@ class NextcloudMonitoring extends utils.Adapter {
 			});
 			this.createdStates.add(id);
 		}
-		await this.setStateAsync(id, { val: value, ack: true });
+		await this.setState(id, { val: value, ack: true });
 	}
 
 	private onUnload(callback: () => void): void {
