@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "nextcloud-monitoring",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "news": {
+      "2.0.3": {
+        "en": "fix: reevaluate state roles\nfix: creation of intermediate objects missing",
+        "de": "fix: neubewertung state rollen\nfix: erstellung von zwischenobjekten fehlt",
+        "ru": "ремонт: переоценка государственных ролей\nфиксация: создание промежуточных объектов, отсутствующих",
+        "pt": "correção: reavaliar funções do estado\ncorreção: criação de objetos intermediários faltando",
+        "nl": "fix: herevaluatie van de rol van de staat\nfix: aanmaken van tussenliggende objecten ontbreekt",
+        "fr": "correction : réévaluer les rôles d'état\ncorrection : création d'objets intermédiaires manquants",
+        "it": "correzione: rivalutare ruoli di stato\nfix: creazione di oggetti intermedi mancanti",
+        "es": "fijación: reevaluar las funciones estatales\nfijación: creación de objetos intermedios desaparecidos",
+        "pl": "fix: ponowna ocena ról stanu\nfix: tworzenie brakujących obiektów pośrednich",
+        "uk": "виправити: реевалюювати ролі держави\nвиправити: створення проміжних об'єктів відсутні",
+        "zh-cn": "修补:重新评估国家作用\n修补: 中间对象缺失的创建"
+      },
       "2.0.2": {
         "en": "fix: language used for stateIds and names\nfix: creation of intermediate objects missing\nchore: update dependencies to latest versions\nadded axios in dependencies",
         "de": "fix: Sprache für Staat Ids und Namen\nfix: erstellung von zwischenobjekten fehlt\nchore: die abhängigkeiten der neuesten versionen aktualisieren\nzusätzlich axios in abhängigkeiten",
