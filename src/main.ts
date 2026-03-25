@@ -601,14 +601,15 @@ class NextcloudMonitoring extends utils.Adapter {
 						const mem = opcache.memory_usage;
 						if (stats) {
 							const hitRate = stats.opcache_hit_rate
-								? `${parseFloat(stats.opcache_hit_rate).toFixed(2)}%`
-								: '0%';
+								? `${parseFloat(stats.opcache_hit_rate).toFixed(2)}`
+								: '0';
 							await this.setAndCreateState(
 								`${serverId}.server.php.opcache.hit_rate`,
 								'Opcache Hit Rate',
 								hitRate,
-								'string',
-								'text',
+								'number',
+								'value',
+								'%',
 							);
 						}
 						if (mem) {
