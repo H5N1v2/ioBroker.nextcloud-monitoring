@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "nextcloud-monitoring",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "news": {
+      "2.0.4": {
+        "en": "update @types/node dependency to version 22.19.15\nfix: update opcache hit rate state type from string to number",
+        "de": "update @types/node abhängigkeit von version 22.19.15\nfix: opcache hit rate state type von string zu nummer aktualisieren",
+        "ru": "обновление @types/node dependency до версии 22.19.15\nисправление: обновление opcache hit rate state type из строки в число",
+        "pt": "atualizar @types/node dependência para a versão 22.19.15\ncorrigir: atualizar opcache bater taxa tipo de estado de string para número",
+        "nl": "update @types/node afhankelijkheid naar versie 22.19.15\nfix: update opcache hit rate status type van string naar nummer",
+        "fr": "mettre à jour la dépendance @types/node vers la version 22.19.15\ncorrection : mettre à jour opcache frapper le type d'état de taux de chaîne en nombre",
+        "it": "aggiornamento @types/node dipendenza alla versione 22.19.15\ncorrezione: aggiornamento opcache hit rate tipo stato dalla stringa al numero",
+        "es": "actualización @tipos/node dependencia a la versión 22.19.15\nfijado: actualización de la tasa de éxito de opcache tipo de estado de cadena a número",
+        "pl": "aktualizacja @ types / zależność węzła od wersji 22.19.15\nfix: update opcache hit state type from string to number",
+        "uk": "оновлення @types/node залежностей до версії 22.19.15\nвиправити: оновлення opcache вдарив номінальний тип від рядка до номер",
+        "zh-cn": "将@types/节点依赖性更新到22.19.15版本\n修补: 从字符串到数字更新 opcache hit rate state 类型"
+      },
       "2.0.3": {
         "en": "fix: reevaluate state roles\nfix: creation of intermediate objects missing",
         "de": "fix: neubewertung state rollen\nfix: erstellung von zwischenobjekten fehlt",
