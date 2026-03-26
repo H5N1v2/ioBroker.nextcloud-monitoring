@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "nextcloud-monitoring",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "news": {
+      "2.0.5": {
+        "en": "add sentry plugin to automatically report errors to developer",
+        "de": "sendry plugin hinzufügen, um automatisch fehler an entwickler zu melden",
+        "ru": "добавляйте шторный плагин для автоматического сообщения об ошибках разработчику",
+        "pt": "adicionar um 'plugin' de sentinela para comunicar automaticamente erros ao programador",
+        "nl": "toe te voegen wachtwoord plugin om automatisch fouten melden aan ontwikkelaar",
+        "fr": "ajouter le plugin sentiry pour signaler automatiquement les erreurs au développeur",
+        "it": "aggiungere plug-in inviato per segnalare automaticamente gli errori allo sviluppatore",
+        "es": "añadir plugin centry para reportar automáticamente errores al desarrollador",
+        "pl": "dodaj wtyczkę sentry do automatycznego zgłaszania błędów deweloperowi",
+        "uk": "додати плагін відправки, щоб автоматично звітувати помилки розробника",
+        "zh-cn": "添加哨兵插件以自动向开发者报告错误"
+      },
       "2.0.4": {
         "en": "update @types/node dependency to version 22.19.15\nfix: update opcache hit rate state type from string to number",
         "de": "update @types/node abhängigkeit von version 22.19.15\nfix: opcache hit rate state type von string zu nummer aktualisieren",
@@ -80,26 +93,13 @@
         "pl": "Poprawa tsconfig i czyszczenie konfiguracji release",
         "zh-cn": "修复tsconfig和清理release配置",
         "uk": "Виправлення tsconfig і очищення конфігурації релізу"
-      },
-      "1.1.1": {
-        "en": "fixed repository URLs and naming conventions\nadded encrypted and protected native support for tokens",
-        "de": "korrigierte Repository-URLs und Namensgebung\nhinzugefügen von verschlüsselten und geschützten nativen Support für Tokens",
-        "ru": "исправлены URL-адреса репозиториев и названия\nдобавлен защищенный и зашифрованный поддержка токенов",
-        "pt": "correções nas URLs dos repositórios e convensões de nome\nadicionado suporte nativo criptografado e protegido para tokens",
-        "nl": "corrigeerde repository-URLs en namenconventies\ntoegevoegd versleutelde en beschermd natieve ondersteuning voor tokens",
-        "fr": "corrections des URLs des repositories et des conventions de nommage\najout de support natif protégé et crypté pour les tokens",
-        "it": "correzioni nelle URL dei repository e nelle convenzioni di nomi\nsupporto nativo protetto e criptato per i token aggiunto",
-        "es": "correcciones en las URLs de los repositorios y las convenciones de nombres\nse agregó el soporte nativo protegido y cifrado para los tokens",
-        "pl": "poprawiono URL repozytoriów i konwencje nazw\ndodano zabezpieczony i zaszyfrowany obsługiwany natywne dla tokenów",
-        "uk": "виправлені URL-адреси репозиторій і назви\nдодано захищене і зашифроване підтримування токенів",
-        "zh-cn": "修正了仓库 URL 和命名规范\n添加了对令牌的加密和保护的原生支持"
       }
     },
     "plugins": {
       "sentry": {
         "dsn": "https://584a5bc670fd4a029c87f19b6887c350@sentry.iknox.de/3"
       }
-    },    
+    },
     "titleLang": {
       "en": "Nextcloud Monitoring",
       "de": "Nextcloud-Überwachung",
