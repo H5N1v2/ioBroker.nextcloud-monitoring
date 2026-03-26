@@ -95,6 +95,11 @@
         "zh-cn": "修正了仓库 URL 和命名规范\n添加了对令牌的加密和保护的原生支持"
       }
     },
+    "plugins": {
+      "sentry": {
+        "dsn": "https://584a5bc670fd4a029c87f19b6887c350@sentry.iknox.de/3"
+      }
+    },    
     "titleLang": {
       "en": "Nextcloud Monitoring",
       "de": "Nextcloud-Überwachung",
