@@ -9,6 +9,10 @@
 
 **Tests:**  ![Test and Release](https://github.com/H5N1v2/iobroker.nextcloud-monitoring/workflows/Test%20and%20Release/badge.svg)
 
+**This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and instructions on disabling error reporting, please refer to the [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Use of Sentry reporting starts with js-controller 3.0.
+
+I use my own Sentry server based on Glitchtip.
+
 # nextcloud-monitoring adapter for ioBroker
 
 ---
@@ -137,6 +141,9 @@ Verify if the token was correctly saved in Nextcloud using:
 If your Nextcloud is in maintenance mode, the adapter will not be able to fetch data and will log an info. This is normal behavior as the API is disabled during maintenance.
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (H5N1v2) add sentry plugin to automatically report errors to developer
+
 ### 2.0.4 (2026-03-25)
 * (H5N1v2) update @types/node dependency to version 22.19.15
 * (mcm1957) fix: update opcache hit rate state type from string to number
