@@ -196,6 +196,8 @@ If your Nextcloud is in maintenance mode, the adapter will not be able to fetch 
 
 ---
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## Support & Feedback
 
 If you encounter any **bugs**, have **feature requests**, or want to suggest **improvements**, please feel free to open an **Issue** on GitHub. This helps to track the progress and helps other users with similar problems.
