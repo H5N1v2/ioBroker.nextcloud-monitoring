@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "nextcloud-monitoring",
-    "version": "2.0.6",
+    "version": "2.1.0",
     "news": {
+      "2.1.0": {
+        "en": "widget toggleable in the admin area.\nupdate dependencies.\nAdapter requires node.js >= 22 now.",
+        "de": "Das Widget kann im Adminbereich ein- und ausgeschaltet werden.\nAbhängigkeiten aktualisieren.\nDer Adapter benötigt jetzt node.js >= 22.",
+        "ru": "Виджет можно включать и выключать в административной панели.\nОбновить зависимости.\nДля работы адаптера теперь требуется Node.js версии >= 22.",
+        "pt": "Widget que pode ser ativado/desativado na área administrativa.\nAtualizar dependências.\nO adaptador agora requer o Node.js versão 22 ou superior.",
+        "nl": "Widget die in het beheerdersgedeelte kan worden in- of uitgeschakeld.\nAfhankelijkheden bijwerken.\nAdapter vereist nu Node.js versie 22 of hoger.",
+        "fr": "Widget activable/désactivable dans la zone d'administration.\nMettre à jour les dépendances.\nL'adaptateur requiert désormais node.js >= 22.",
+        "it": "Widget attivabile/disattivabile nell'area di amministrazione.\naggiornare le dipendenze.\nL'adattatore ora richiede Node.js >= 22.",
+        "es": "Widget que se puede activar o desactivar en el área de administración.\nActualizar dependencias.\nEl adaptador ahora requiere node.js >= 22.",
+        "pl": "widżet przełączany w obszarze administracyjnym.\nzaktualizuj zależności.\nAdapter wymaga teraz node.js >= 22.",
+        "uk": "віджет, який можна перемикати в адміністративній панелі.\nоновлення залежностей.\nАдаптер тепер вимагає node.js >= 22.",
+        "zh-cn": "后台管理区域可切换显示/隐藏小部件。\n更新依赖项。\n适配器现在需要 node.js >= 22。"
+      },
       "2.0.6": {
         "en": "Update axios dependency to version 1.14.0",
         "de": "Update axios Abhängigkeit von Version 1.14.0",
@@ -80,19 +93,6 @@
         "pl": "fix: Optymalizacja tworzenia stanu poprzez buforowanie istniejących stanów\nfix: Ustaw nagłówek połączenia na 'close' w żądaniu API",
         "uk": "виправити: Оптимізувати державне створення шляхом кешування існуючих станів\nвиправити: встановити заголовок підключення до 'закривати' в запиті API",
         "zh-cn": "固定: 通过缓存现有状态优化状态创建\n固定: 在 API 请求中设置“ 关闭” 的连接头"
-      },
-      "2.0.0": {
-        "en": "Multi-server support added, state structure refactored for better clarity, and localization expanded for all languages.",
-        "de": "Multi-Server-Unterstützung hinzugefügt, Datenpunkt-Struktur für bessere Übersicht überarbeitet und Lokalisierung für alle Sprachen erweitert.",
-        "ru": "Добавлена поддержка нескольких серверов, структура состояний переработана для большей ясности, расширена локализация для всех языков.",
-        "pt": "Suporte multi-servidor adicionado, estrutura de estados reformulada para maior clareza e localização expandida para todos os idiomas.",
-        "nl": "Multi-server ondersteuning toegevoegd, datastructuur herzien voor meer duidelijkheid, en lokalisatie uitgebreid voor alle talen.",
-        "fr": "Ajout du support multi-serveur, restructuration des états pour plus de clarté et extension de la localisation pour toutes les langues.",
-        "it": "Aggiunto il supporto multi-server, ristrutturazione degli stati per una migliore chiarezza e localizzazione ampliata per tutte le lingue.",
-        "es": "Añadido soporte multi-servidor, reestructuración de estados para mayor claridad y localización ampliada para todos los idiomas.",
-        "pl": "Dodano obsługę wielu serwerów, przebudowano strukturę stanów dla lepszej przejrzystości oraz rozszerzono lokalizację dla wszystkich języków.",
-        "uk": "Додана підтримка декількох серверів, структура станів перероблена для кращої ясності, розширена локалізація для всіх мов.",
-        "zh-cn": "添加了多服务器支持，重构了状态结构以使其更清晰，并扩展了所有语言的本地化。"
       }
     },
     "plugins": {
