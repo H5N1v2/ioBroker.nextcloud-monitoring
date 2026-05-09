@@ -17,20 +17,8 @@ I use my own Sentry server based on Glitchtip.
 # nextcloud-monitoring adapter for ioBroker
 
 ---
-## ⚠️ Important Note: Naming Convention Change (v1.1.2+)
-
-> **ATTENTION:** Due to official ioBroker naming guidelines, this adapter has been renamed from `nextcloud_monitoring` (underscore) to **`nextcloud-monitoring`** (dash).
-
-**What does this mean for you?**
-* **No automatic updates:** If you are using version 1.1.1 or older, you will no longer receive updates through the old package name.
-* **Reinstallation required:** Please uninstall the old version (`nextcloud_monitoring`) and install the new version (`nextcloud-monitoring`) via the ioBroker repository or GitHub.
-* **Settings:** You will need to re-enter your instance configuration once in the new version.
-
-We apologize for the inconvenience, but this change was necessary to comply with official ioBroker repository standards.
----
 
 ## Description
-### First: If you are looking for a widget specifically for this adapter, then create it using [VIS2-widget-nextcloud-monitoring](https://github.com/H5N1v2/VIS2-widget-nextcloud-monitoring)
 This adapter allows for detailed monitoring of your Nextcloud instance via the official OCS API (`serverinfo`). It provides numerous system data, user statistics, shares, as well as performance values from PHP (OPcache/FPM) and the database directly in ioBroker.
 
 ## Features
@@ -38,7 +26,7 @@ This adapter allows for detailed monitoring of your Nextcloud instance via the o
 * **User Statistics:** Number of active users (5 min, 1 hr, 24 hr), total number of files, and storage usage.
 * **Shares:** Monitoring of link shares, Talk rooms, and federated shares.
 * **Server Health:** PHP version, memory limit, OPcache hit rate, and detailed FPM process statistics.
-* **Widget:** A special widget specifically for Nextcloud monitoring is available [HERE](https://github.com/H5N1v2/VIS2-widget-nextcloud-monitoring).
+* **Widget:** Use the internal widget, which creates an htmlWidget data point in the location folder; or, if you wish to customize it yourself, use [this one](https://github.com/H5N1v2/VIS2-widget-nextcloud-monitoring).
 
 ---
 
@@ -49,6 +37,12 @@ This adapter allows for detailed monitoring of your Nextcloud instance via the o
 * **Token:** The OCS API token of your Nextcloud (see section "How-To: Token").
 * **Update Interval:** Time in minutes between API requests (Default: 10 min, Minimum: 5 min).
 * **Multible Server:** You can now add multible Server e.g.: my_server_1, and next server e.g.: other_server_2
+* **Widget:** 
+1. **Enable:** Check the "Create Widget" checkbox in the instance settings for your location.
+2. **Find State:** The adapter will create a state called `htmlWidget` (under `nextcloud-monitoring.0.SERVERNAME.htmlWidget`).
+3. **In VIS/VIS2:** * Drag a standard **"HTML" widget** onto your view.
+   * Set the "HTML" property of that widget to the binding of your state: `{nextcloud-monitoring.0.SERVERNAME.htmlWidget}`.
+   * Adjust the width and height of the widget container to fit the content.
 
 ### 2. Data Options
 * **Skip Apps:** Disables the detailed list of installed apps to reduce API load.
@@ -143,7 +137,9 @@ If your Nextcloud is in maintenance mode, the adapter will not be able to fetch 
 
 ## Changelog
 ### **WORK IN PROGRESS**
-- (copilot) Adapter requires node.js >= 22 now
+* (H5N1v2) widget toggleable in the admin area.
+* (H5N1v2) update dependencies.
+* (copilot) Adapter requires node.js >= 22 now.
 
 ### 2.0.6 (2026-03-30)
 * (H5N1v2) Update axios dependency to version 1.14.0
