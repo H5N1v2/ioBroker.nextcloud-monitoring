@@ -24,9 +24,12 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var utils = __toESM(require("@iobroker/adapter-core"));
 var import_nextcloudApi = require("./lib/nextcloudApi");
 var import_words = require("./lib/words");
+var import_widgetGenerator = require("./lib/widgetGenerator");
 class NextcloudMonitoring extends utils.Adapter {
   updateInterval;
   createdStates = /* @__PURE__ */ new Set();
+  systemLanguage = "en";
+  widgetGenerator = new import_widgetGenerator.WidgetGenerator();
   constructor(options = {}) {
     super({ ...options, name: "nextcloud-monitoring" });
     this.on("ready", this.onReady.bind(this));
@@ -36,11 +39,41 @@ class NextcloudMonitoring extends utils.Adapter {
    * Initialisiert den Adapter und startet die Abfragen für alle konfigurierten Server.
    */
   async onReady() {
+    var _a;
     const config = this.config;
+    const servers = config.servers || [];
+    let configChanged = false;
+    for (const server of servers) {
+      if (server.createWidget === void 0) {
+        server.createWidget = false;
+        configChanged = true;
+      }
+      if (server.widgetFontSize === void 0) {
+        server.widgetFontSize = 12;
+        configChanged = true;
+      }
+      if (server.widgetDarkMode === void 0) {
+        server.widgetDarkMode = false;
+        configChanged = true;
+      }
+    }
+    if (configChanged) {
+      this.log.info("Old configuration detected: Default values for widget settings have been added.");
+      await this.extendForeignObjectAsync(`system.adapter.${this.namespace}`, {
+        native: { servers }
+      });
+      return;
+    }
     this.log.debug("onReady: starting initialization");
     if (!config.servers || !Array.isArray(config.servers) || config.servers.length === 0) {
       this.log.error("Configuration incomplete: No servers found in the table!");
       return;
+    }
+    try {
+      const sysConfig = await this.getForeignObjectAsync("system.config");
+      this.systemLanguage = ((_a = sysConfig == null ? void 0 : sysConfig.common) == null ? void 0 : _a.language) || "en";
+    } catch {
+      this.systemLanguage = "en";
     }
     await this.extendForeignObjectAsync(this.namespace, {
       type: "meta",
@@ -95,7 +128,7 @@ class NextcloudMonitoring extends utils.Adapter {
         },
         native: {}
       });
-      await this.updateNextcloudData(cleanId, apiClient);
+      await this.updateNextcloudData(cleanId, apiClient, server);
       this.log.debug(`updateAllServers: finished processing ${cleanId}`);
     }
     this.log.debug("updateAllServers: completed all servers");
@@ -105,8 +138,9 @@ class NextcloudMonitoring extends utils.Adapter {
    *
    * @param serverId ID of the server used as the root folder in the object tree
    * @param apiClient Instance of the NextcloudApiClient for this specific server
+   * @param server Server configuration object, used for widget settings and logging
    */
-  async updateNextcloudData(serverId, apiClient) {
+  async updateNextcloudData(serverId, apiClient, server) {
     var _a, _b;
     try {
       this.log.debug(`updateNextcloudData: fetching data for ${serverId}`);
@@ -206,7 +240,7 @@ class NextcloudMonitoring extends utils.Adapter {
             fr: "Param\xE8tres PHP",
             pt: "Configura\xE7\xF5es do PHP",
             nl: "PHP-instellingen",
-            uk: "\u041D\u0430luftungen PHP"
+            uk: "\u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F PHP"
           }
         },
         {
@@ -726,6 +760,56 @@ class NextcloudMonitoring extends utils.Adapter {
           "number",
           "value"
         );
+      }
+      const widgetId = `${serverId}.htmlWidget`;
+      if (server.createWidget) {
+        const widgetConfig = {
+          fontSize: server.widgetFontSize || 12,
+          darkMode: !!server.widgetDarkMode,
+          serverName: server.name || server.domain,
+          language: this.systemLanguage
+        };
+        const html = this.widgetGenerator.generateHtml(data, widgetConfig);
+        if (!this.createdStates.has(widgetId)) {
+          await this.setObjectNotExistsAsync(widgetId, {
+            type: "state",
+            common: {
+              name: {
+                en: "HTML Widget",
+                de: "HTML Widget",
+                fr: "Widget HTML",
+                it: "Widget HTML",
+                es: "Widget HTML",
+                pl: "Widget HTML",
+                pt: "Widget HTML",
+                nl: "HTML Widget",
+                ru: "HTML \u0432\u0438\u0434\u0436\u0435\u0442",
+                uk: "HTML \u0432\u0456\u0434\u0436\u0435\u0442",
+                "zh-cn": "HTML \u7EC4\u4EF6"
+              },
+              type: "string",
+              role: "html",
+              read: true,
+              write: false
+            },
+            native: {}
+          });
+          this.createdStates.add(widgetId);
+        }
+        await this.setState(widgetId, { val: html, ack: true });
+        this.log.debug(`updateNextcloudData: HTML widget written for ${serverId}`);
+      } else {
+        if (this.createdStates.has(widgetId)) {
+          await this.delObjectAsync(widgetId);
+          this.createdStates.delete(widgetId);
+          this.log.debug(`updateNextcloudData: Removed htmlWidget (cache hit) for ${serverId}`);
+        } else {
+          const obj = await this.getObjectAsync(widgetId);
+          if (obj) {
+            await this.delObjectAsync(widgetId);
+            this.log.debug(`updateNextcloudData: Removed pre-existing htmlWidget for ${serverId}`);
+          }
+        }
       }
       this.log.debug(`Monitoring (${serverId}): All data updated successfully.`);
     } catch (error) {
