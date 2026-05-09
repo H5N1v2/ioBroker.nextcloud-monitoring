@@ -14,5 +14,8 @@
     "Check this to reduce data volume (skips detailed app list)": "Check this to reduce data volume (skips detailed app list)",
     "Skip Update Check": "Skip Update Check",
     "Check this to disable version checking": "Check this to disable version checking",
-    "min": "min."
+    "min": "min.",
+    "Font Size (px)": "Font Size (px)",
+    "Dark Mode": "Dark Mode",
+    "Create Widget": "Create Widget"
 }
