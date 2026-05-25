@@ -78,10 +78,10 @@ sudo -u www-data php occ config:app:set serverinfo token --value YOUR_GENERATED_
 ```
 **If you use your Nextcloud in a webspace or other Provider, mostly you don't need sudo, simply do:**
  ```bash
- #Directly in your Nextcloudfolder
+#Directly in your Nextcloudfolder
 php occ config:app:set serverinfo token --value YOUR_GENERATED_TOKEN
 
-# Or with path
+#Or with path
 php /path_to/your/nextcloud_folder/occ config:app:set serverinfo token --value YOUR_GENERATED_TOKEN
 ```
 
