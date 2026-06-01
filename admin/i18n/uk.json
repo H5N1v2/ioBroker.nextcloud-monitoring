@@ -17,5 +17,6 @@
     "Time in minutes between API calls": "Час у хвилинах між викликами API",
     "Token": "Токен",
     "Update Interval": "Інтервал оновлення",
-    "min": "хв."
+    "min": "хв.",
+    "your-cloud.com": "your-cloud.com"
 }

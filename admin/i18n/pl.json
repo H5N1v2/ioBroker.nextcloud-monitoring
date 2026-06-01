@@ -17,5 +17,6 @@
     "Time in minutes between API calls": "Czas w minutach między wywołaniami API",
     "Token": "Token",
     "Update Interval": "Częstotliwość aktualizacji",
-    "min": "min."
+    "min": "min.",
+    "your-cloud.com": "twoja-chmura.com"
 }

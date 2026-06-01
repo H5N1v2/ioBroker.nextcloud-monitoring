@@ -17,5 +17,6 @@
     "Time in minutes between API calls": "API 调用间隔时间（分钟）",
     "Token": "令牌 (Token)",
     "Update Interval": "更新间隔",
-    "min": "分钟"
+    "min": "分钟",
+    "your-cloud.com": "your-cloud.com"
 }

@@ -17,5 +17,6 @@
     "Time in minutes between API calls": "Temps en minutes entre les appels API",
     "Token": "Jeton (Token)",
     "Update Interval": "Intervalle de mise à jour",
-    "min": "min."
+    "min": "min.",
+    "your-cloud.com": "votre-cloud.com"
 }
