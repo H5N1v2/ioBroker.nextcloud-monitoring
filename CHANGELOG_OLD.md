@@ -1,4 +1,8 @@
 # Older changes
+## 2.0.3 (2026-03-18)
+* (mcm1957) fix: reevaluate state roles
+* (mcm1957) fix: creation of intermediate objects missing
+
 ## 2.0.2 (2026-03-05)
 * (H5N1v2) fix: language used for stateIds and names
 * (H5N1v2) fix: creation of intermediate objects missing
