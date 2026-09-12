@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "nextcloud-monitoring",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "news": {
+      "2.1.2": {
+        "en": "add node.js 26.x testmatrix\nupdate dependencies",
+        "de": "node.js 26.x Testmatrix hinzugefügt\nAbhängigkeiten aktualisiert",
+        "ru": "добавить тестовую матрицу node.js 26.x\nобновить зависимости",
+        "pt": "add node.js 26.x testmatrix\natualizar dependências",
+        "nl": "node.js 26.x testmatrix toevoegen\nafhankelijkheden bijwerken",
+        "fr": "add node.js 26.x testmatrix\nmettre à jour les dépendances",
+        "it": "add node.js 26.x testmatrix\naggiorna dipendenze",
+        "es": "añadir node.js 26.x testmatrix\nactualizar dependencias",
+        "pl": "dodaj node.js 26.x testmatrix\naktualizuj zależności",
+        "uk": "додати тестову матрицю node.js 26.x\nоновлення залежностей",
+        "zh-cn": "添加 node.js 26.x 测试矩阵\n更新依赖关系"
+      },
       "2.1.1": {
         "en": "chore: update dependencies\nfix: [W5612] add translations for 'your-cloud.com' in multiple languages\nfix: [E6025] README.md must contain exactly one H1 heading, but found 6.",
         "de": "Aufgabe: Abhängigkeiten aktualisieren\nBehoben: [W5612] Übersetzungen für „your-cloud.com“ in mehreren Sprachen hinzugefügt\nFehlerbehebung: [E6025] Die Datei README.md muss genau eine H1-Überschrift enthalten, es wurden jedoch 6 gefunden.",
@@ -80,19 +93,6 @@
         "pl": "fix: ponowna ocena ról stanu\nfix: tworzenie brakujących obiektów pośrednich",
         "uk": "виправити: реевалюювати ролі держави\nвиправити: створення проміжних об'єктів відсутні",
         "zh-cn": "修补:重新评估国家作用\n修补: 中间对象缺失的创建"
-      },
-      "2.0.2": {
-        "en": "fix: language used for stateIds and names\nfix: creation of intermediate objects missing\nchore: update dependencies to latest versions\nadded axios in dependencies",
-        "de": "fix: Sprache für Staat Ids und Namen\nfix: erstellung von zwischenobjekten fehlt\nchore: die abhängigkeiten der neuesten versionen aktualisieren\nzusätzlich axios in abhängigkeiten",
-        "ru": "язык, используемый для государства Ids и имена\nфиксация: создание промежуточных объектов, отсутствующих\nchore: зависимость обновлений от последних версий\nдобавлены аксиосы в зависимости",
-        "pt": "correção: idioma usado para o estado IDs e nomes\ncorreção: criação de objetos intermediários faltando\ntarefa: atualizar dependências para versões mais recentes\nadicionado axios em dependências",
-        "nl": "fix: taal gebruikt voor status Identiteiten en namen\nfix: aanmaken van tussenliggende objecten ontbreekt\nklus: update afhankelijkheden van de nieuwste versies\ntoegevoegde axio's in afhankelijkheden",
-        "fr": "correctif: langue utilisée pour l'état Id. et noms\ncorrection : création d'objets intermédiaires manquants\ncore: mettre à jour les dépendances aux dernières versions\naxios ajoutés dans les dépendances",
-        "it": "correzione: lingua utilizzata per lo stato Ids e nomi\nfix: creazione di oggetti intermedi mancanti\ncore: aggiornare le dipendenze alle ultime versioni\naggiunto assio in dipendenze",
-        "es": "fijación: idioma utilizado para el estado Ids and names\nfijación: creación de objetos intermedios desaparecidos\ncore: actualizar las dependencias a las últimas versiones\naxios añadidos en dependencias",
-        "pl": "fix: język używany dla stanu Identyfikatory i nazwy\nfix: tworzenie brakujących obiektów pośrednich\ncore: aktualizacja zależności do najnowszych wersji\ndodano aksjos w zależności",
-        "uk": "виправити: мова використовується для держави Ids і імена\nвиправити: створення проміжних об'єктів відсутні\nchore: оновлення залежності до останніх версій\nдодано аксіос в залежності",
-        "zh-cn": "修补:用于状态的语言 编号和名称\n修补: 中间对象缺失的创建\n字符串:更新对最新版本的依赖\n在依赖中添加轴"
       }
     },
     "plugins": {
