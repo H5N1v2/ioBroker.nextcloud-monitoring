@@ -1,5 +1,3 @@
-// This file extends the AdapterConfig type from "@iobroker/types"
-
 // Augment the globally declared type ioBroker.AdapterConfig
 declare global {
     namespace ioBroker {
@@ -12,7 +10,7 @@ declare global {
             skipApps: boolean;
             skipUpdate: boolean;
         }
-e
+
         interface NextcloudServer {
             name: string;
             domain: string;
