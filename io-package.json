@@ -156,24 +156,79 @@
     },
     "dependencies": [
       {
-        "js-controller": ">=6.0.11"
+        "js-controller": ">=7.2.4"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=7.6.20"
+        "admin": ">=8.1.0"
+      }
+    ],
+    "messages": [
+      {
+        "condition": {
+          "operand": "and",
+          "rules": [
+            "oldVersion<3.0.0",
+            "newVersion>=3.0.0"
+          ]
+        },
+        "title": {
+          "en": "Important changes in version 3.0.0",
+          "de": "Wichtige Änderungen in Version 3.0.0",
+          "ru": "Важные изменения в версии 3.0.0",
+          "pt": "Alterações importantes na versão 3.0.0",
+          "nl": "Belangrijke wijzigingen in versie 3.0.0",
+          "fr": "Modifications importantes de la version 3.0.0",
+          "it": "Modifiche importanti nella versione 3.0.0",
+          "es": "Cambios importantes en la versión 3.0.0",
+          "pl": "Ważne zmiany w wersji 3.0.0",
+          "uk": "Важливі зміни у версії 3.0.0",
+          "zh-cn": "3.0.0 版本的重要更改"
+        },
+        "text": {
+          "en": "Version 3.0.0 stores the OCS tokens encrypted and protects them from access by other adapters. Existing tokens are encrypted automatically on the first start.\nThe legacy configuration fields \"Domain\" and \"Token\" have been removed; only the server table is used now.\nThe adapter now requires js-controller >= 7.2.4 and Admin >= 8.1.0.\nAfter the update, please check that all Nextcloud servers are listed in the table with a valid token.",
+          "de": "Version 3.0.0 speichert die OCS-Tokens verschlüsselt und schützt sie vor dem Zugriff anderer Adapter. Bereits vorhandene Tokens werden beim ersten Start automatisch verschlüsselt.\nDie alten Konfigurationsfelder „Domain“ und „Token“ entfallen; maßgeblich ist ausschließlich die Server-Tabelle.\nDer Adapter benötigt jetzt js-controller >= 7.2.4 und Admin >= 8.1.0.\nBitte prüfen Sie nach dem Update, ob alle Nextcloud-Server mit gültigem Token in der Tabelle stehen.",
+          "ru": "Версия 3.0.0 хранит токены OCS в зашифрованном виде и защищает их от доступа других адаптеров. Существующие токены шифруются автоматически при первом запуске.\nУстаревшие поля конфигурации «Domain» и «Token» удалены; используется только таблица серверов.\nАдаптеру теперь требуются js-controller >= 7.2.4 и Admin >= 8.1.0.\nПосле обновления проверьте, что все серверы Nextcloud указаны в таблице с действующим токеном.",
+          "pt": "A versão 3.0.0 armazena os tokens OCS de forma encriptada e protege-os do acesso por outros adaptadores. Os tokens existentes são encriptados automaticamente no primeiro arranque.\nOs campos de configuração antigos «Domain» e «Token» foram removidos; apenas a tabela de servidores é utilizada.\nO adaptador necessita agora de js-controller >= 7.2.4 e Admin >= 8.1.0.\nApós a atualização, verifique se todos os servidores Nextcloud estão na tabela com um token válido.",
+          "nl": "Versie 3.0.0 slaat de OCS-tokens versleuteld op en beveiligt ze tegen toegang door andere adapters. Bestaande tokens worden bij de eerste start automatisch versleuteld.\nDe oude configuratievelden 'Domain' en 'Token' zijn verwijderd; alleen de servertabel wordt nog gebruikt.\nDe adapter vereist nu js-controller >= 7.2.4 en Admin >= 8.1.0.\nControleer na de update of alle Nextcloud-servers met een geldig token in de tabel staan.",
+          "fr": "La version 3.0.0 stocke les jetons OCS de manière chiffrée et les protège contre l'accès par d'autres adaptateurs. Les jetons existants sont chiffrés automatiquement au premier démarrage.\nLes anciens champs de configuration « Domain » et « Token » ont été supprimés ; seul le tableau des serveurs est utilisé désormais.\nL'adaptateur requiert désormais js-controller >= 7.2.4 et Admin >= 8.1.0.\nAprès la mise à jour, vérifiez que tous les serveurs Nextcloud figurent dans le tableau avec un jeton valide.",
+          "it": "La versione 3.0.0 memorizza i token OCS in forma cifrata e li protegge dall'accesso di altri adattatori. I token esistenti vengono cifrati automaticamente al primo avvio.\nI vecchi campi di configurazione «Domain» e «Token» sono stati rimossi; viene utilizzata solo la tabella dei server.\nL'adattatore ora richiede js-controller >= 7.2.4 e Admin >= 8.1.0.\nDopo l'aggiornamento verificare che tutti i server Nextcloud siano presenti nella tabella con un token valido.",
+          "es": "La versión 3.0.0 almacena los tokens OCS cifrados y los protege del acceso de otros adaptadores. Los tokens existentes se cifran automáticamente en el primer inicio.\nLos antiguos campos de configuración «Domain» y «Token» se han eliminado; ahora solo se utiliza la tabla de servidores.\nEl adaptador ahora requiere js-controller >= 7.2.4 y Admin >= 8.1.0.\nDespués de la actualización, compruebe que todos los servidores Nextcloud estén en la tabla con un token válido.",
+          "pl": "Wersja 3.0.0 przechowuje tokeny OCS w postaci zaszyfrowanej i chroni je przed dostępem innych adapterów. Istniejące tokeny są szyfrowane automatycznie przy pierwszym uruchomieniu.\nStare pola konfiguracji „Domain” i „Token” zostały usunięte; używana jest wyłącznie tabela serwerów.\nAdapter wymaga teraz js-controller >= 7.2.4 i Admin >= 8.1.0.\nPo aktualizacji sprawdź, czy wszystkie serwery Nextcloud znajdują się w tabeli z prawidłowym tokenem.",
+          "uk": "Версія 3.0.0 зберігає токени OCS у зашифрованому вигляді та захищає їх від доступу інших адаптерів. Наявні токени шифруються автоматично під час першого запуску.\nЗастарілі поля конфігурації «Domain» і «Token» вилучено; використовується лише таблиця серверів.\nАдаптеру тепер потрібні js-controller >= 7.2.4 та Admin >= 8.1.0.\nПісля оновлення перевірте, чи всі сервери Nextcloud є в таблиці з чинним токеном.",
+          "zh-cn": "3.0.0 版本以加密方式存储 OCS 令牌，并防止其他适配器访问。现有的令牌会在首次启动时自动加密。\n旧的“Domain”和“Token”配置字段已被移除，仅使用服务器表格。\n该适配器现在需要 js-controller >= 7.2.4 和 Admin >= 8.1.0。\n更新后请检查表格中是否列出了所有 Nextcloud 服务器并带有有效令牌。"
+        },
+        "link": "https://github.com/H5N1v2/ioBroker.nextcloud-monitoring/blob/main/README.md#3-requirements",
+        "linkText": {
+          "en": "Open README section \"3. Requirements\"",
+          "de": "README-Abschnitt „3. Requirements“ öffnen",
+          "ru": "Открыть раздел README «3. Requirements»",
+          "pt": "Abrir a secção «3. Requirements» do README",
+          "nl": "README-sectie '3. Requirements' openen",
+          "fr": "Ouvrir la section « 3. Requirements » du README",
+          "it": "Apri la sezione «3. Requirements» del README",
+          "es": "Abrir la sección «3. Requirements» del README",
+          "pl": "Otwórz sekcję „3. Requirements” w README",
+          "uk": "Відкрити розділ README «3. Requirements»",
+          "zh-cn": "打开 README 中的“3. Requirements”章节"
+        },
+        "level": "warn",
+        "buttons": [
+          "agree",
+          "cancel"
+        ]
       }
     ]
   },
   "protectedNative": [
-    "token"
+    "token",
+    "servers.token"
   ],
   "encryptedNative": [
-    "token"
+    "servers.token"
   ],
   "native": {
-    "domain": "",
-    "token": "",
     "skipApps": true,
     "skipUpdate": true
   },
