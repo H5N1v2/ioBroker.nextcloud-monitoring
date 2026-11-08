@@ -145,7 +145,7 @@ Verify if the token was correctly saved in Nextcloud using:
 If your Nextcloud is in maintenance mode, the adapter will not be able to fetch data and will log an info. This is normal behavior as the API is disabled during maintenance.
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 3.0.0 (2026-11-08)
 * (H5N1v2) fix: OCS tokens of all servers are now stored encrypted (`encryptedNative: servers.token`) and are protected against access by other adapters (`protectedNative`). Tokens of existing installations are kept and are encrypted automatically if they were still stored as plain text, so they do not have to be entered again
 * (H5N1v2) fix: OPcache hit rate was written as string although the datapoint expects a number; existing datapoints with wrong type or role are now corrected automatically and state values are converted to match their datapoint type
 * (H5N1v2) update dependencies: adapter requires js-controller >= 7.2.4 and admin >= 8.1.0 (needed for encrypted attributes inside a table)
@@ -166,9 +166,6 @@ If your Nextcloud is in maintenance mode, the adapter will not be able to fetch 
 
 ### 2.0.6 (2026-03-30)
 * (H5N1v2) Update axios dependency to version 1.14.0
-
-### 2.0.5 (2026-03-26)
-* (H5N1v2) add sentry plugin to automatically report errors to developer
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

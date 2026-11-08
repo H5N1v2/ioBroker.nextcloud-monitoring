@@ -1,4 +1,7 @@
 # Older changes
+## 2.0.5 (2026-03-26)
+* (H5N1v2) add sentry plugin to automatically report errors to developer
+
 ## 2.0.4 (2026-03-25)
 * (H5N1v2) update @types/node dependency to version 22.19.15
 * (mcm1957) fix: update opcache hit rate state type from string to number
