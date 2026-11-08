@@ -1,5 +1,6 @@
 import * as utils from '@iobroker/adapter-core';
 import { NextcloudApiClient } from './lib/nextcloudApi';
+import { resolveServerToken } from './lib/serverToken';
 import { words } from './lib/words';
 import type { WidgetConfig } from './lib/widgetGenerator';
 import { WidgetGenerator } from './lib/widgetGenerator';
@@ -64,13 +65,22 @@ class NextcloudMonitoring extends utils.Adapter {
 			}
 		}
 
-		if (configChanged) {
-			this.log.info('Old configuration detected: Default values for widget settings have been added.');
-			await this.extendForeignObjectAsync(`system.adapter.${this.namespace}`, {
-				native: { servers },
-			});
+		// OCS-Tokens aus Altbeständen (Klartext) erkennen und verschlüsselt zurückschreiben
+		const repairedTokens = await this.repairPlainTextTokens(servers);
 
-			return;
+		if (configChanged || repairedTokens > 0) {
+			if (configChanged) {
+				this.log.info('Old configuration detected: Default values for widget settings have been added.');
+			}
+			if (repairedTokens > 0) {
+				this.log.info(`Configuration updated: ${repairedTokens} OCS token(s) are now stored encrypted.`);
+			}
+			// updateConfig verschlüsselt die Token; ein direktes Schreiben von native würde sie im Klartext ablegen
+			await this.writeServersConfig(servers);
+
+			if (configChanged) {
+				return;
+			}
 		}
 		this.log.debug('onReady: starting initialization');
 
@@ -114,6 +124,71 @@ class NextcloudMonitoring extends utils.Adapter {
 			await this.updateAllServers();
 		}, intervalMs);
 		this.log.debug(`onReady: scheduled updates every ${minutes} minutes`);
+	}
+
+	/**
+	 * Erkennt OCS-Tokens, die noch unverschlüsselt im Instanzobjekt liegen.
+	 *
+	 * Die in `encryptedNative` genannten Attribute (`servers.token`) entschlüsselt ioBroker beim
+	 * Adapterstart. Wurde ein Token vor der Aktivierung der Verschlüsselung gespeichert - oder von
+	 * einer Admin-Version ohne Unterstützung für verschachtelte Tabellenattribute - liefert diese
+	 * Entschlüsselung keinen brauchbaren Wert. Der Klartext wird dann direkt aus dem Instanzobjekt
+	 * gelesen und für den laufenden Betrieb verwendet. Bereits verschlüsselte Werte bleiben unberührt.
+	 *
+	 * @param servers Serverliste aus der Adapterkonfiguration, wird in-place aktualisiert
+	 * @returns Anzahl der Tokens, die verschlüsselt werden müssen
+	 */
+	private async repairPlainTextTokens(servers: NextcloudServer[]): Promise<number> {
+		if (servers.length === 0) {
+			return 0;
+		}
+
+		let storedServers: unknown;
+		try {
+			const instanceObject = await this.getForeignObjectAsync(`system.adapter.${this.namespace}`);
+			const native = instanceObject?.native as Record<string, unknown> | undefined;
+			storedServers = native?.servers;
+		} catch (error) {
+			this.log.debug(`Could not read the own instance object: ${String(error)}`);
+			return 0;
+		}
+
+		if (!Array.isArray(storedServers)) {
+			return 0;
+		}
+
+		let repaired = 0;
+		for (let i = 0; i < servers.length; i++) {
+			const stored = storedServers[i] as { token?: unknown } | undefined;
+			const resolution = resolveServerToken(servers[i].token, stored?.token);
+			if (!resolution.needsEncryption) {
+				continue;
+			}
+			servers[i].token = resolution.token;
+			repaired++;
+		}
+
+		return repaired;
+	}
+
+	/**
+	 * Schreibt die Serverliste zurück in das Instanzobjekt.
+	 *
+	 * `updateConfig` verschlüsselt die in `encryptedNative` genannten Attribute (`servers.token`)
+	 * vor dem Speichern und führt bestehende Konfigurationswerte zusammen. Ein direktes Schreiben
+	 * von `native` würde die Token im Klartext ablegen.
+	 *
+	 * @param servers Serverliste mit Klartext-Tokens
+	 */
+	private async writeServersConfig(servers: NextcloudServer[]): Promise<void> {
+		try {
+			await this.updateConfig({ servers });
+		} catch (error) {
+			// Kein Abbruch: die Tokens werden beim nächsten Start erneut geprüft
+			this.log.error(
+				`Could not store the server configuration: ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
 	}
 
 	/**
@@ -647,9 +722,8 @@ class NextcloudMonitoring extends utils.Adapter {
 						const stats = opcache.opcache_statistics;
 						const mem = opcache.memory_usage;
 						if (stats) {
-							const hitRate = stats.opcache_hit_rate
-								? `${parseFloat(stats.opcache_hit_rate).toFixed(2)}`
-								: '0';
+							const hitRateRaw = Number(stats.opcache_hit_rate);
+							const hitRate = Number.isFinite(hitRateRaw) ? Math.round(hitRateRaw * 100) / 100 : 0;
 							await this.setAndCreateState(
 								`${serverId}.server.php.opcache.hit_rate`,
 								'Opcache Hit Rate',
@@ -886,7 +960,7 @@ class NextcloudMonitoring extends utils.Adapter {
 	private async setAndCreateState(
 		id: string,
 		nameKey: string,
-		value: any,
+		value: unknown,
 		type: ioBroker.CommonType,
 		role: string,
 		unit?: string,
@@ -894,23 +968,92 @@ class NextcloudMonitoring extends utils.Adapter {
 		const translatedName = words[nameKey] || nameKey;
 		this.log.debug(`setAndCreateState: ${id} value=${String(value)}`);
 
-		// Objekt nur erstellen, wenn es noch nicht gecacht ist
+		// Objekt nur beim ersten Aufruf nach dem Adapterstart prüfen/erstellen
 		if (!this.createdStates.has(id)) {
-			await this.setObjectNotExistsAsync(id, {
-				type: 'state',
-				common: {
-					name: translatedName,
-					type,
-					role,
-					read: true,
-					write: false,
-					...(unit !== undefined ? { unit } : {}),
-				},
-				native: {},
-			});
+			const existing = await this.getObjectAsync(id);
+
+			if (!existing) {
+				await this.setObject(id, {
+					type: 'state',
+					common: {
+						name: translatedName,
+						type,
+						role,
+						read: true,
+						write: false,
+						...(unit !== undefined ? { unit } : {}),
+					},
+					native: {},
+				});
+			} else if (existing.type === 'state') {
+				// Migration für Bestandsinstallationen: falscher Typ oder falsche Rolle wird automatisch korrigiert
+				const existingCommon = existing.common as ioBroker.StateCommon;
+				if (existingCommon.type !== type || existingCommon.role !== role) {
+					this.log.info(
+						`Object ${id} migrated: type "${String(existingCommon.type)}" -> "${type}", role "${String(existingCommon.role)}" -> "${role}"`,
+					);
+					await this.extendObject(id, { common: { type, role } });
+				}
+			}
 			this.createdStates.add(id);
 		}
-		await this.setState(id, { val: value, ack: true });
+
+		await this.setState(id, { val: this.normalizeStateValue(value, type), ack: true });
+	}
+
+	/**
+	 * Wandelt einen Rohwert in den für den Datenpunkt-Typ passenden Wert um.
+	 * Ungültige oder fehlende Werte werden als null geschrieben.
+	 *
+	 * @param value Raw value to be written
+	 * @param type Target data type of the state
+	 */
+	private normalizeStateValue(value: unknown, type: ioBroker.CommonType): ioBroker.StateValue {
+		if (value === null || value === undefined) {
+			return null;
+		}
+
+		if (type === 'number') {
+			if (typeof value === 'number') {
+				return Number.isFinite(value) ? value : null;
+			}
+			if (typeof value === 'string' && value.trim() !== '') {
+				const parsed = Number(value.trim().replace(',', '.'));
+				return Number.isFinite(parsed) ? parsed : null;
+			}
+			return null;
+		}
+
+		if (type === 'boolean') {
+			if (typeof value === 'boolean') {
+				return value;
+			}
+			if (typeof value === 'number') {
+				return value !== 0;
+			}
+			if (typeof value === 'string') {
+				const lower = value.trim().toLowerCase();
+				if (lower === 'true' || lower === '1') {
+					return true;
+				}
+				if (lower === 'false' || lower === '0') {
+					return false;
+				}
+			}
+			return null;
+		}
+
+		if (type === 'string') {
+			if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+				return String(value);
+			}
+			return null;
+		}
+
+		if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+			return value;
+		}
+		return null;
 	}
 
 	/**
