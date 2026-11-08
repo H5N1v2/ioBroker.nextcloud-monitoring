@@ -99,14 +99,14 @@
                     "type": "checkbox",
                     "label": "Skip Apps Data",
                     "help": "Check this to reduce data volume (skips detailed app list)",
-                    "default": false,
+                    "default": true,
                     "sm": 12, "xs": 12, "md": 3, "lg": 3, "xl": 3
                 },
                 "skipUpdate": {
                     "type": "checkbox",
                     "label": "Skip Update Check",
                     "help": "Check this to disable version checking",
-                    "default": false,
+                    "default": true,
                     "sm": 12, "xs": 12, "md": 3, "lg": 3, "xl": 3
                 }
             }
