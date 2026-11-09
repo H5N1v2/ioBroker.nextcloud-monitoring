@@ -1,4 +1,7 @@
 # Older changes
+## 2.0.6 (2026-03-30)
+* (H5N1v2) Update axios dependency to version 1.14.0
+
 ## 2.0.5 (2026-03-26)
 * (H5N1v2) add sentry plugin to automatically report errors to developer
 
