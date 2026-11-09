@@ -893,7 +893,7 @@ class NextcloudMonitoring extends utils.Adapter {
     if (!this.createdStates.has(id)) {
       const existing = await this.getObjectAsync(id);
       if (!existing) {
-        await this.setObject(id, {
+        await this.setObjectNotExistsAsync(id, {
           type: "state",
           common: {
             name: translatedName,
