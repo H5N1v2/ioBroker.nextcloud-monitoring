@@ -222,7 +222,6 @@
     ]
   },
   "protectedNative": [
-    "token",
     "servers.token"
   ],
   "encryptedNative": [
