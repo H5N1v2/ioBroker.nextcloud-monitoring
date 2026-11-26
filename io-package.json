@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "nextcloud-monitoring",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "news": {
+      "3.0.2": {
+        "en": "fix: a server that fails during initialization no longer stops the monitoring of the other configured Nextcloud servers; the error is logged with the server name and the remaining servers are still processed\nfix: a failed scheduled update run is now logged as an error instead of ending as an unhandled promise rejection",
+        "de": "Fix: Ein Server, der während der Initialisierung fehlschlägt, blockiert nicht mehr die Überwachung der anderen konfigurierten Nextcloud-Server; der Fehler wird samt Servername protokolliert und die übrigen Server werden weiterhin verarbeitet\nFix: Ein fehlgeschlagener geplanter Update-Durchlauf wird nun als Fehler protokolliert, statt als unbehandelte Promise-Rejection zu enden",
+        "ru": "fix: сбой сервера при инициализации больше не прерывает мониторинг остальных настроенных серверов Nextcloud; ошибка записывается в журнал с указанием имени сервера, а обработка остальных серверов продолжается\nfix: неудачный запуск запланированного обновления теперь записывается в журнал как ошибка, а не завершается как необработанное отклонение промиса (unhandled promise rejection)",
+        "pt": "fix: um servidor que falha durante a inicialização não interrompe mais o monitoramento dos outros servidores Nextcloud configurados; o erro é registrado com o nome do servidor e os demais servidores continuam sendo processados\nfix: uma execução de atualização agendada que falha agora é registrada como erro em vez de resultar em uma rejeição de promise não tratada",
+        "nl": "fix: een server die tijdens de initialisatie faalt, onderbreekt de monitoring van de andere geconfigureerde Nextcloud-servers niet langer; de fout wordt met de servernaam gelogd en de overige servers worden gewoon verwerkt\nfix: een mislukte geplande update-run wordt nu als fout gelogd in plaats van te eindigen als een onafgehandelde promise-rejection",
+        "fr": "fix : un serveur qui échoue lors de l'initialisation n'interrompt plus la surveillance des autres serveurs Nextcloud configurés ; l'erreur est journalisée avec le nom du serveur et les serveurs restants continuent d'être traités\nfix : l'échec d'une mise à jour planifiée est désormais journalisé en tant qu'erreur au lieu de provoquer un rejet de promesse non géré (unhandled promise rejection)",
+        "it": "fix: un server che non riesce a inizializzarsi non interrompe più il monitoraggio degli altri server Nextcloud configurati; l'errore viene registrato insieme al nome del server e i restanti server continuano a essere elaborati\nfix: l'esecuzione non riuscita di un aggiornamento pianificato viene ora registrata come errore anziché terminare come una unhandled promise rejection",
+        "es": "fix: un servidor que falla durante la inicialización ya no detiene la monitorización de los demás servidores de Nextcloud configurados; el error se registra junto con el nombre del servidor y los servidores restantes se siguen procesando\nfix: una ejecución de actualización programada fallida ahora se registra como error en lugar de terminar como un rechazo de promesa no controlado (unhandled promise rejection)",
+        "pl": "fix: serwer, którego inicjalizacja zakończy się niepowodzeniem, nie przerywa już monitorowania pozostałych skonfigurowanych serwerów Nextcloud; błąd jest rejestrowany wraz z nazwą serwera, a pozostałe serwery są nadal przetwarzane\nfix: nieudane uruchomienie zaplanowanej aktualizacji jest teraz rejestrowane jako błąd, zamiast kończyć się jako nieobsłużone odrzucenie obietnicy (unhandled promise rejection)",
+        "uk": "fix: збій сервера під час ініціалізації більше не зупиняє моніторинг інших налаштованих серверів Nextcloud; помилка записується в журнал із зазначенням імені сервера, а решта серверів продовжують оброблятися\nfix: невдалий запуск запланованого оновлення тепер реєструється як помилка, а не завершується як необроблене відхилення промісу (unhandled promise rejection)",
+        "zh-cn": "fix: 初始化期间失败的服务器不再中断对其他已配置 Nextcloud 服务器的监控；错误会连同服务器名称一起记录到日志中，其余服务器仍会继续处理\nfix: 失败的定时更新任务现在会记录为错误，而不再以未处理的 Promise 拒绝（unhandled promise rejection）结束"
+      },
       "3.0.1": {
         "en": "fix: [W1095] remove the unused legacy key `token` from `protectedNative` and from `native`; the adapter stores and protects the OCS token of the server table only (`servers.token`)\nfix: [S5054] datapoints are created with `setObjectNotExistsAsync()` instead of `setObject()`",
         "de": "fix: [W1095] entfernt den unbenutzten Altschlüssel `token` aus `ProtectedNative` und `native`; der Adapter speichert und schützt nur das OCS-Token der Servertabelle (`servers.token`)\nFix: [S5054] Datenpunkte werden mit `setObjectNotExistsAsync () `statt `setObject ()` erzeugt",
@@ -80,19 +93,6 @@
         "pl": "Aktualizuj zależność aksjosu od wersji 1.14.0",
         "uk": "Update axios залежність до версії 1.14.0",
         "zh-cn": "将轴依赖性更新到1.14.0版本"
-      },
-      "2.0.5": {
-        "en": "add sentry plugin to automatically report errors to developer",
-        "de": "sendry plugin hinzufügen, um automatisch fehler an entwickler zu melden",
-        "ru": "добавляйте шторный плагин для автоматического сообщения об ошибках разработчику",
-        "pt": "adicionar um 'plugin' de sentinela para comunicar automaticamente erros ao programador",
-        "nl": "toe te voegen wachtwoord plugin om automatisch fouten melden aan ontwikkelaar",
-        "fr": "ajouter le plugin sentiry pour signaler automatiquement les erreurs au développeur",
-        "it": "aggiungere plug-in inviato per segnalare automaticamente gli errori allo sviluppatore",
-        "es": "añadir plugin centry para reportar automáticamente errores al desarrollador",
-        "pl": "dodaj wtyczkę sentry do automatycznego zgłaszania błędów deweloperowi",
-        "uk": "додати плагін відправки, щоб автоматично звітувати помилки розробника",
-        "zh-cn": "添加哨兵插件以自动向开发者报告错误"
       }
     },
     "plugins": {

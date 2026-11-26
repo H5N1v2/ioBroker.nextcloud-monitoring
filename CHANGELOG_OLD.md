@@ -1,4 +1,9 @@
 # Older changes
+## 2.1.0 (2026-05-09)
+* (H5N1v2) widget toggleable in the admin area.
+* (H5N1v2) update dependencies.
+* (copilot) Adapter requires node.js >= 22 now.
+
 ## 2.0.6 (2026-03-30)
 * (H5N1v2) Update axios dependency to version 1.14.0
 
