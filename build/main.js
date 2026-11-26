@@ -104,7 +104,11 @@ class NextcloudMonitoring extends utils.Adapter {
     const minutes = config.interval || 10;
     const intervalMs = minutes * 60 * 1e3;
     this.updateInterval = this.setInterval(async () => {
-      await this.updateAllServers();
+      try {
+        await this.updateAllServers();
+      } catch (error) {
+        this.log.error(`Scheduled update failed: ${error instanceof Error ? error.message : String(error)}`);
+      }
     }, intervalMs);
     this.log.debug(`onReady: scheduled updates every ${minutes} minutes`);
   }
@@ -173,28 +177,38 @@ class NextcloudMonitoring extends utils.Adapter {
     const config = this.config;
     this.log.debug("updateAllServers: starting update for all servers");
     for (const server of config.servers) {
-      if (!server.domain || !server.token) {
-        this.log.warn(`Server "${server.name || "Unknown"}" skipped: Domain or token is missing.`);
-        continue;
+      try {
+        if (!server.domain || !server.token) {
+          this.log.warn(`Server "${server.name || "Unknown"}" skipped: Domain or token is missing.`);
+          continue;
+        }
+        this.log.debug(`updateAllServers: processing server ${server.name || server.domain}`);
+        const cleanId = (server.name || server.domain).replace(this.FORBIDDEN_CHARS, "_").replace(/\s|\./g, "_");
+        this.log.info(`Query running for: ${server.name} (${server.domain})`);
+        const apiClient = new import_nextcloudApi.NextcloudApiClient(
+          server.domain,
+          server.token.trim(),
+          config.skipApps,
+          config.skipUpdate
+        );
+        await this.setObjectNotExistsAsync(cleanId, {
+          type: "device",
+          common: {
+            name: server.name || server.domain
+          },
+          native: {}
+        });
+        await this.updateNextcloudData(cleanId, apiClient, server);
+        this.log.debug(`updateAllServers: finished processing ${cleanId}`);
+      } catch (error) {
+        const failedServer = (server == null ? void 0 : server.name) || (server == null ? void 0 : server.domain) || "Unknown";
+        this.log.error(
+          `Error while processing server "${failedServer}": ${error instanceof Error ? error.message : String(error)}`
+        );
+        this.log.debug(
+          `updateAllServers error for ${failedServer}: ${error instanceof Error ? error.stack : String(error)}`
+        );
       }
-      this.log.debug(`updateAllServers: processing server ${server.name || server.domain}`);
-      const cleanId = (server.name || server.domain).replace(this.FORBIDDEN_CHARS, "_").replace(/\s|\./g, "_");
-      this.log.info(`Query running for: ${server.name} (${server.domain})`);
-      const apiClient = new import_nextcloudApi.NextcloudApiClient(
-        server.domain,
-        server.token.trim(),
-        config.skipApps,
-        config.skipUpdate
-      );
-      await this.setObjectNotExistsAsync(cleanId, {
-        type: "device",
-        common: {
-          name: server.name || server.domain
-        },
-        native: {}
-      });
-      await this.updateNextcloudData(cleanId, apiClient, server);
-      this.log.debug(`updateAllServers: finished processing ${cleanId}`);
     }
     this.log.debug("updateAllServers: completed all servers");
   }
