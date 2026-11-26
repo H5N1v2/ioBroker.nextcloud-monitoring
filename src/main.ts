@@ -121,7 +121,12 @@ class NextcloudMonitoring extends utils.Adapter {
 		const intervalMs = minutes * 60 * 1000;
 
 		this.updateInterval = this.setInterval(async () => {
-			await this.updateAllServers();
+			try {
+				await this.updateAllServers();
+			} catch (error) {
+				// Ein fehlgeschlagener Lauf darf nicht als unbehandelte Promise-Rejection enden.
+				this.log.error(`Scheduled update failed: ${error instanceof Error ? error.message : String(error)}`);
+			}
 		}, intervalMs);
 		this.log.debug(`onReady: scheduled updates every ${minutes} minutes`);
 	}
@@ -199,33 +204,46 @@ class NextcloudMonitoring extends utils.Adapter {
 		this.log.debug('updateAllServers: starting update for all servers');
 
 		for (const server of config.servers) {
-			if (!server.domain || !server.token) {
-				this.log.warn(`Server "${server.name || 'Unknown'}" skipped: Domain or token is missing.`);
-				continue;
+			try {
+				if (!server.domain || !server.token) {
+					this.log.warn(`Server "${server.name || 'Unknown'}" skipped: Domain or token is missing.`);
+					continue;
+				}
+				this.log.debug(`updateAllServers: processing server ${server.name || server.domain}`);
+
+				// Erzeuge eine saubere ID für den ioBroker Objektbaum
+				const cleanId = (server.name || server.domain)
+					.replace(this.FORBIDDEN_CHARS, '_')
+					.replace(/\s|\./g, '_');
+
+				this.log.info(`Query running for: ${server.name} (${server.domain})`);
+
+				const apiClient = new NextcloudApiClient(
+					server.domain,
+					server.token.trim(),
+					config.skipApps,
+					config.skipUpdate,
+				);
+				await this.setObjectNotExistsAsync(cleanId, {
+					type: 'device',
+					common: {
+						name: server.name || server.domain,
+					},
+					native: {},
+				});
+
+				await this.updateNextcloudData(cleanId, apiClient, server);
+				this.log.debug(`updateAllServers: finished processing ${cleanId}`);
+			} catch (error) {
+				// Ein fehlerhafter Server darf die Verarbeitung der übrigen Server nicht verhindern.
+				const failedServer = server?.name || server?.domain || 'Unknown';
+				this.log.error(
+					`Error while processing server "${failedServer}": ${error instanceof Error ? error.message : String(error)}`,
+				);
+				this.log.debug(
+					`updateAllServers error for ${failedServer}: ${error instanceof Error ? error.stack : String(error)}`,
+				);
 			}
-			this.log.debug(`updateAllServers: processing server ${server.name || server.domain}`);
-
-			// Erzeuge eine saubere ID für den ioBroker Objektbaum
-			const cleanId = (server.name || server.domain).replace(this.FORBIDDEN_CHARS, '_').replace(/\s|\./g, '_');
-
-			this.log.info(`Query running for: ${server.name} (${server.domain})`);
-
-			const apiClient = new NextcloudApiClient(
-				server.domain,
-				server.token.trim(),
-				config.skipApps,
-				config.skipUpdate,
-			);
-			await this.setObjectNotExistsAsync(cleanId, {
-				type: 'device',
-				common: {
-					name: server.name || server.domain,
-				},
-				native: {},
-			});
-
-			await this.updateNextcloudData(cleanId, apiClient, server);
-			this.log.debug(`updateAllServers: finished processing ${cleanId}`);
 		}
 		this.log.debug('updateAllServers: completed all servers');
 	}
